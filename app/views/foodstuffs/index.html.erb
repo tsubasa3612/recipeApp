@@ -1,0 +1,9 @@
+<h1>Foodstuffs</h1>
+
+<ul>
+    <% @foodstuffs.each do |foodstuff| %>
+    <li> <%= foodstuff.title %> </li>
+    <% end %>
+</ul>
+
+<p><%= link_to "Add new", new_foodstuff_path %></p>

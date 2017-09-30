@@ -1,0 +1,16 @@
+<% @project = Project.new unless @project %>
+
+<%= form_for @project do |f| %>
+<p>
+	<%= f.text_field :title %><br>
+
+	<% if @project.errors.any? %>
+		<%= @project.errors.messages[:title][0] %>
+	<% end %>
+</p>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+<p>
+	<%= f.submit "食材を追加" %><br>
+</p>
+
+<% end %>

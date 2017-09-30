@@ -1,0 +1,14 @@
+<%= form_for @foodstuff do |f| %>
+<p>
+	<%= f.text_field :title %><br>
+
+	<% if @foodstuff.errors.any? %>
+		<%= @foodstuff.errors.messages[:title][0] %>
+	<% end %>
+</p>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+<p>
+	<%= f.submit %><br>
+</p>
+
+<% end %>
