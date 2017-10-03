@@ -4,5 +4,8 @@ Rails.application.routes.draw do
   root "projects#index"
 
   resources :projects
+
+  post "projects/recipe" => "projects#recipe"
+
   resources :foodstuffs
 end

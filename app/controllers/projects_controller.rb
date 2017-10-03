@@ -39,6 +39,24 @@ class ProjectsController < ApplicationController
     	redirect_to projects_path
     end
 
+    def recipe
+        uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
+        json = Net::HTTP.get(uri)
+        results = JSON.parse(json)
+        # binding.pry
+
+        #取得したjsonデータをDBに入れるための繰り返し処理
+        results["result"].each do |r|
+        # binding.pry
+            Recipe.create!(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"])
+                r["recipeMaterial"].each do |m|
+        # binding.pry
+                    Material.create!(name: m, recipe_id: material.recipe._id)
+                end
+        end
+
+    end
+
     private
 
 	    def project_params
