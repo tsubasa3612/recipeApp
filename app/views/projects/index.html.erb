@@ -13,39 +13,4 @@
 <%= render 'form' %>
 </p>
 
-<!-- <p><%= link_to "Add New", new_project_path %></p> -->
-
-<h1>調味料リスト</h1>
-<ul>
-	<% @foodstuffs.each do |foodstuff| %>
-		<li><%= foodstuff.title %>
-			<%= link_to "[Delete]", foodstuff_path(foodstuff.id), method: :delete, data: {confirm: "are you sure?"} %>
-		</li>
-	<% end %>
-
-</ul>
-
-<!--<p><%= link_to "Add New", new_foodstuff_path %></p>-->
-
-<% @foodstuff = Foodstuff.new unless @foodstuff %>
-
-<%= form_for @foodstuff do |f| %>
-	<p>
-		<%= f.text_field :title %><br>
-
-		<% if @foodstuff.errors.any? %>
-			<%= @foodstuff.errors.messages[:title][0] %>
-		<% end %>
-	</p>
-
-		<%= f.hidden_field :user_id, :value => current_user.id %>
-
-	<p>
-		<%= f.submit "調味料を追加" %><br>
-	</p>
-
-<% end %>
-
-
-
-<%= button_to "レシピを取得する", :action => "recipe" %>
+<%= link_to "今の食材で作れるレシピを取得する" %>

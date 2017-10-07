@@ -13,9 +13,10 @@
 
 <!-- deviseのログイン機能に関する記述 -->
         <% if user_signed_in? %>
-           Logged in as <%= current_user.email %>
-            <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>
-            <%= link_to 'プロフィール変更', edit_user_registration_path %>
+           Logged in as <%= current_user.email %>｜
+            <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>｜
+            <%= link_to 'プロフィール変更', edit_user_registration_path %>｜
+            <%= link_to "レシピを更新する（実行に1分ほど時間がかかります！）", :action => "recipe", :controller => "projects" %>
         <% else %>
             <%= link_to "新規登録", new_user_registration_path %> |
             <%= link_to "ログイン", new_user_session_path %>

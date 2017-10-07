@@ -40,41 +40,23 @@ class ProjectsController < ApplicationController
     end
 
     def recipe
-
-        #カテゴリ取得APIを叩いてデータを取得する
-        #取得したカテゴリIDを取り出す
-        #取り出したカテゴリIDを並べる
-        #並べたカテゴリIDをカテゴリ別ランキングAPIのURLのcategoryId=のところに入れられる形に整える
-        #並べたカテゴリIDをカテゴリ別ランキングAPIのURLのcategoryId=のところに入れる
-        #カテゴリ別ランキングAPIを叩いて取得したデータをDBに保存する
-        #カテゴリ別ランキングの取得を全てのカテゴリIDで繰り返す
-
-        #カテゴリ取得API
-        uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryList/20170426?format=json&categoryType=large&applicationId=1039136772752765175')        
+        #カテゴリ取得APIを叩いてjsonデータ取得
+        uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryList/20170426?format=json&elements=categoryId&categoryType=large&applicationId=1039136772752765175')
         json = Net::HTTP.get(uri)
         category = JSON.parse(json)
-        # binding.pry
+        sleep(2)
 
-        category["result"]["categoryId"].each do |c|
-
-            #カテゴリ別ランキング取得apiを叩いてjsonデータを取ってきてパースする
-            # uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
-            uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&categoryId= + c + &elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
+        category["result"]["large"].each do |c|
+            sleep(2)
+            #カテゴリ別ランキング取得apiを叩いてjsonデータ取得
+            uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&categoryId=' + c["categoryId"] + '&elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
             json = Net::HTTP.get(uri)
             results = JSON.parse(json)
-            # binding.pry
-
             #パースしたjsonデータをDBに入れるための繰り返し処理
             results["result"].each do |r|
-            # binding.pry
                 recipe = Recipe.create!(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
-            # binding.pry
                     r["recipeMaterial"].each do |m|
-            # binding.pry
-                        # recipe = Recipe.new
-            # binding.pry
                         m = Material.create!(name: m, recipe_id: recipe.id)
-            # binding.pry
                     end
             end
         end
