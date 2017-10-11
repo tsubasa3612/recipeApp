@@ -5,6 +5,8 @@ class ProjectsController < ApplicationController
 		@projects = Project.all
         @foodstuffs = Foodstuff.all
         @user = current_user
+        @search = Recipe.ransack(params[:q])
+        @result = @search.result
 	end
 
     def show
@@ -45,23 +47,22 @@ class ProjectsController < ApplicationController
         json = Net::HTTP.get(uri)
         category = JSON.parse(json)
         sleep(2)
-
-        category["result"]["large"].each do |c|
+            category["result"]["large"].each do |c|
             sleep(2)
-            #カテゴリ別ランキング取得apiを叩いてjsonデータ取得
-            uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&categoryId=' + c["categoryId"] + '&elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
-            json = Net::HTTP.get(uri)
-            results = JSON.parse(json)
-            #パースしたjsonデータをDBに入れるための繰り返し処理
-            results["result"].each do |r|
-                recipe = Recipe.create!(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
-                    r["recipeMaterial"].each do |m|
-                        m = Material.create!(name: m, recipe_id: recipe.id)
+                #カテゴリ別ランキング取得apiを叩いてjsonデータ取得
+                uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&categoryId=' + c["categoryId"] + '&elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
+                json = Net::HTTP.get(uri)
+                results = JSON.parse(json)
+                    #パースしたjsonデータをDBに入れるための繰り返し処理
+                    results["result"].each do |r|
+                        recipe = Recipe.create!(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
+                            r["recipeMaterial"].each do |m|
+                                m = Material.create!(name: m, recipe_id: recipe.id)
+                            end
                     end
             end
-        end
-
     end
+
 
     private
 
@@ -72,4 +73,5 @@ class ProjectsController < ApplicationController
 	    def set_project
 	    	@project = Project.find(params[:id])
 	    end
+
 end

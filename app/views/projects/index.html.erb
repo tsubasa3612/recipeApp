@@ -1,16 +1,41 @@
 <h1>食材リスト</h1>
 
-<ul>
-  <% @user.projects.each do |project| %>
-    <li><%= link_to project.title, project_path(project.id) %>
-    	<%= link_to "[Edit]", edit_project_path(project.id) %>
-    	<%= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "are you sure?"} %>
-    </li>
-  <% end %>
-</ul>
-
+	<ul style="list-style: none;">
+	  <% @user.projects.each do |project| %>
+	    <li>
+	    	<%= link_to project.title, project_path(project.id) %>
+	    	<%= link_to "[Edit]", edit_project_path(project.id) %>
+	    	<%= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "are you sure?"} %>
+	    </li>
+	  <% end %>
+	</ul>
 <p>
-<%= render 'form' %>
+	<%= render 'form' %>
 </p>
 
-<%= link_to "今の食材で作れるレシピを取得する" %>
+<h2>レシピを検索</h2>
+
+	<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
+		<div class="form-group">
+			<%= f.label :materials_name_cont, "食材名" %>
+			<%= f.search_field :materials_name_cont, class: "form-controll" %>
+		</div>
+		<div class="action">
+			<%= f.submit %>
+		</div>
+	<% end %>
+
+<h2>検索結果</h2>
+
+	<% if @result.any? %>
+		<% @result.each do |recipe| %>
+			<p>レシピ名：<%= recipe.title %><br>
+				食材：<% recipe.materials.each do |m| %>
+					<%= m.name %>｜
+				<% end %></p>
+		<% end %>
+	<% end %>
+
+	<% if @result.nil? %>
+		<p>検索結果がありません</p>
+	<% end %>
