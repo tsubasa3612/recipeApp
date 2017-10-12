@@ -1,14 +1,22 @@
 <h1>食材リスト</h1>
 
+<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
+
 	<ul style="list-style: none;">
-	  <% @user.projects.each do |project| %>
-	    <li>
-	    	<%= link_to project.title, project_path(project.id) %>
-	    	<%= link_to "[Edit]", edit_project_path(project.id) %>
-	    	<%= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "are you sure?"} %>
+	  <%# @user.projects.each do |project| %>
+	    <li><%#= f.label :materials_name_cont %>
+	    	<%= f.collection_check_boxes :materials_name_cont, @user.projects, :id, :title %><br>
+	    	<%#= link_to "[Edit]", edit_project_path(project.id) %>
+	    	<%#= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "are you sure?"} %>
 	    </li>
-	  <% end %>
+	  <%# end %>
 	</ul>
+
+	<div class="action">
+		<%= f.submit %>
+	</div>
+<% end %>
+
 <p>
 	<%= render 'form' %>
 </p>
