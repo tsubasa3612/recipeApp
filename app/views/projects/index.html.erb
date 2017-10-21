@@ -1,49 +1,87 @@
-<h1>食材リスト</h1>
+<div class="row">
 
-<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
+	<div class="col-sm-4">
 
-	<ul style="list-style: none;">
-	  <%# @user.projects.each do |project| %>
-	    <li><%#= f.label :materials_name_cont %>
-	    	<%= f.collection_check_boxes :materials_name_cont, @user.projects, :id, :title %><br>
-	    	<%#= link_to "[Edit]", edit_project_path(project.id) %>
-	    	<%#= link_to "[Delete]", project_path(project.id), method: :delete, data: {confirm: "are you sure?"} %>
-	    </li>
-	  <%# end %>
-	</ul>
+	<h2>食材リスト</h2>
 
-	<div class="action">
-		<%= f.submit %>
-	</div>
-<% end %>
-
-<p>
 	<%= render 'form' %>
-</p>
 
-<h2>レシピを検索</h2>
+	<% if params[:q].present? %>
+		<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
 
-	<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
-		<div class="form-group">
-			<%= f.label :materials_name_cont, "食材名" %>
-			<%= f.search_field :materials_name_cont, class: "form-controll" %>
-		</div>
-		<div class="action">
-			<%= f.submit %>
-		</div>
-	<% end %>
+			<div class="wrapper">
+				<ul style="list-style: none;">
+				   		<%= f.collection_check_boxes :materials_name_cont, @user.projects, :title, :title, include_hidden: false do |b| %>
+						   	  <li>
+					    		<%= b.check_box %>
+					    		<%= b.label %>
+					    		<%#= link_to "[Delete]", project_path(project_id: project.id), method: :delete, data: {confirm: "are you sure?"} %>
+							  </li>
+				  		<% end %>
+				</ul>
 
-<h2>検索結果</h2>
+			</div>
 
-	<% if @result.any? %>
-		<% @result.each do |recipe| %>
-			<p>レシピ名：<%= recipe.title %><br>
-				食材：<% recipe.materials.each do |m| %>
-					<%= m.name %>｜
-				<% end %></p>
+			<div class="action">
+				<%= f.submit "チェックボックスからレシピを検索", class:"btn btn-primary"  %>
+			</div>
+
+		<% end %>
+	<% else %>
+		<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
+
+			<div class="wrapper">
+				<ul style="list-style: none;">
+				   		<%= f.collection_check_boxes :materials_name_cont, @user.projects, :title, :title, include_hidden: true do |b| %>
+						   	  <li>
+					    		<%= b.check_box %>
+					    		<%= b.label %>
+					    		<%#= link_to "[Delete]", project_path(project_id: project.id), method: :delete, data: {confirm: "are you sure?"} %>
+							  </li>
+						<% end %>
+				</ul>
+			</div>
+
+
+			<div class="action">
+				<%= f.submit "チェックボックスからレシピを検索", class:"btn btn-primary"  %>
+			</div>
+
 		<% end %>
 	<% end %>
 
-	<% if @result.nil? %>
-		<p>検索結果がありません</p>
-	<% end %>
+	<p>
+		<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
+			<div class="form-group">
+				<%= f.label :materials_name_cont, "食材名" %>
+				<%= f.search_field :materials_name_cont, class: "form-controll" %>
+			</div>
+			<div class="action">
+				<%= f.submit "フリーワードからレシピを検索" %>
+			</div>
+		<% end %>
+	</p>
+
+	</div>
+
+	<div class="col-sm-8">
+
+		<h2>検索結果</h2>
+
+			<% if params[:q].present? %>
+				<% @result.each do |recipe| %>
+					<div class="wrapper">
+						<p>レシピ名：<%= link_to recipe.title, recipe.url, :target => ["_blank"] %><br>
+								    
+							食材：<% recipe.materials.each do |m| %>
+								<%= m.name %>｜
+							<% end %></p>
+					</div>
+				<% end %>
+
+			<% else %>
+				<p>検索結果がありません</p>
+			<% end %>
+
+	</div>
+</div>

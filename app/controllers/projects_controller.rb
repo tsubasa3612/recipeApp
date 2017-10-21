@@ -2,11 +2,15 @@ class ProjectsController < ApplicationController
 	before_action :set_project, only: [:show, :edit, :update, :destroy]
 
 	def index
-		@projects = Project.all
-        @foodstuffs = Foodstuff.all
         @user = current_user
-        @search = Recipe.ransack(params[:q])
-        @result = @search.result
+        # @project = Project.find(params[:id])
+        if params[:q].present?
+            @search = Recipe.ransack(materials_name_eq_any: params[:q]["materials_name_cont"])
+            @result = @search.result
+        else
+            params[:q] = nil
+            @search = Recipe.ransack(params[:q])
+        end
 	end
 
     def show
@@ -56,11 +60,18 @@ class ProjectsController < ApplicationController
                     #パースしたjsonデータをDBに入れるための繰り返し処理
                     results["result"].each do |r|
                         recipe = Recipe.create!(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
+                        # require "open-uri"
+                        # recipeimage = open(r["smallImageUrl"])
+                        # Recipe.create!(image: recipeimage.read)
                             r["recipeMaterial"].each do |m|
                                 m = Material.create!(name: m, recipe_id: recipe.id)
                             end
                     end
             end
+    end
+
+    def check_search
+
     end
 
 
@@ -73,5 +84,6 @@ class ProjectsController < ApplicationController
 	    def set_project
 	    	@project = Project.find(params[:id])
 	    end
+
 
 end
