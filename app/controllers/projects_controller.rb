@@ -3,10 +3,9 @@ class ProjectsController < ApplicationController
 
 	def index
         @user = current_user
-        # @project = Project.find(params[:id])
         if params[:q].present?
             @search = Recipe.ransack(materials_name_eq_any: params[:q]["materials_name_cont"])
-            @result = @search.result
+            @result = @search.result.distinct
         else
             params[:q] = nil
             @search = Recipe.ransack(params[:q])
@@ -59,15 +58,13 @@ class ProjectsController < ApplicationController
                 results = JSON.parse(json)
                     #パースしたjsonデータをDBに入れるための繰り返し処理
                     results["result"].each do |r|
-                        recipe = Recipe.create!(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
-                        # require "open-uri"
-                        # recipeimage = open(r["smallImageUrl"])
-                        # Recipe.create!(image: recipeimage.read)
+                        recipe = Recipe.create(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
                             r["recipeMaterial"].each do |m|
-                                m = Material.create!(name: m, recipe_id: recipe.id)
+                                m = Material.create(name: m, recipe_id: recipe.id)
                             end
                     end
             end
+        redirect_to root_path
     end
 
     def check_search

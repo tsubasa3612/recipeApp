@@ -1,7 +1,5 @@
 <div class="row">
-
 	<div class="col-sm-4">
-
 	<h2>食材リスト</h2>
 
 	<%= render 'form' %>
@@ -15,7 +13,7 @@
 						   	  <li>
 					    		<%= b.check_box %>
 					    		<%= b.label %>
-					    		<%#= link_to "[Delete]", project_path(project_id: project.id), method: :delete, data: {confirm: "are you sure?"} %>
+					    		<%= link_to "削除", "projects/#{b.object.id}", method: :delete, data: {confirm: "are you sure?"}, class:"btn" %>
 							  </li>
 				  		<% end %>
 				</ul>
@@ -36,7 +34,7 @@
 						   	  <li>
 					    		<%= b.check_box %>
 					    		<%= b.label %>
-					    		<%#= link_to "[Delete]", project_path(project_id: project.id), method: :delete, data: {confirm: "are you sure?"} %>
+					    		<%= link_to "削除", "projects/#{b.object.id}", method: :delete, data: {confirm: "are you sure?"}, class:"btn" %>
 							  </li>
 						<% end %>
 				</ul>
@@ -50,38 +48,26 @@
 		<% end %>
 	<% end %>
 
-	<p>
-		<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
-			<div class="form-group">
-				<%= f.label :materials_name_cont, "食材名" %>
-				<%= f.search_field :materials_name_cont, class: "form-controll" %>
-			</div>
-			<div class="action">
-				<%= f.submit "フリーワードからレシピを検索" %>
-			</div>
-		<% end %>
-	</p>
+	<% if current_user.id == 1 %>
+		<%= link_to "レシピデータを更新する（実行に5分ほど時間がかかります！）", :action => "recipe", :controller => "projects" %>
+	<% end %>
 
 	</div>
 
 	<div class="col-sm-8">
-
-		<h2>検索結果</h2>
-
-			<% if params[:q].present? %>
-				<% @result.each do |recipe| %>
-					<div class="wrapper">
-						<p>レシピ名：<%= link_to recipe.title, recipe.url, :target => ["_blank"] %><br>
-								    
-							食材：<% recipe.materials.each do |m| %>
-								<%= m.name %>｜
-							<% end %></p>
-					</div>
-				<% end %>
-
-			<% else %>
-				<p>検索結果がありません</p>
+	<h2>今作れるレシピ</h2>
+		<% if params[:q].present? %>
+			<% @result.each do |recipe| %>
+				<div class="wrapper">
+					<p>レシピ名：<%= link_to recipe.title, recipe.url, :target => ["_blank"] %><br>
+						食材：<% recipe.materials.each do |m| %>
+							<%= m.name %>｜
+						<% end %></p>
+				</div>
 			<% end %>
+		<% else %>
+			<p>検索結果がありません</p>
+		<% end %>
 
 	</div>
 </div>
