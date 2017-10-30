@@ -18,21 +18,58 @@
 @import "bootstrap";
 
 body {
-	background: #dddddd;
-	padding: 20px;
+	background-image: image-url("vintage-concrete.png");
+    padding: 20px;
 }
 
-.selection{
-	color: #444444;
-	margin: 10px;
+.nav{
+    float: right
+}
+
+h1{
+    color: rgba(0,0,0,.6);
+    margin: auto;
+    width: 400px;
+    text-align: center;
+}
+
+h2{
+    color: rgba(0,0,0,.6);
 }
 
 .wrapper{
     padding: 0.5em 1em;
     margin: 2em 0;
     font-weight: bold;
-    color: #6091d3;/*文字色*/
-    background: #FFF;
-    border: solid 3px #6091d3;/*線*/
+    color: rgba(0,0,0,.6);/*文字色*/
+    /*background-image: image-url("ricepaper_v3.png");*/
+    border: solid 2px rgba(0,0,0,.2);/*線*/
+    /*box-shadow; solid 1px rgba(255,255,255,.3);*/
     border-radius: 10px;/*角の丸み*/
+}
+
+.box {
+    position: relative;
+    margin: 2em 0;
+    padding: 0.5em 1em;
+    border: solid 3px rgba(0,0,0,.2);
+}
+.box .box-title {
+    position: absolute;
+    display: inline-block;
+    top: -27px;
+    left: -3px;
+    padding: 0 9px;
+    height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
+    font-size: 17px;
+    background: rgba(0,0,0,.2);
+    color: rgba(0,0,0,.7);
+    font-weight: bold;
+    border-radius: 5px 5px 0 0;
+}
+.box p {
+    margin: 0; 
+    padding: 0;
 }

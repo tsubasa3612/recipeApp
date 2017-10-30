@@ -1,13 +1,12 @@
 <div class="row">
 	<div class="col-sm-4">
-	<h2>食材リスト</h2>
 
-	<%= render 'form' %>
-
+	<br><br>
 	<% if params[:q].present? %>
 		<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
 
-			<div class="wrapper">
+			<div class="box">
+			<span class="box-title">食材リスト</span><p>
 				<ul style="list-style: none;">
 				   		<%= f.collection_check_boxes :materials_name_cont, @user.projects, :title, :title, include_hidden: false do |b| %>
 						   	  <li>
@@ -16,19 +15,19 @@
 					    		<%= link_to "削除", "projects/#{b.object.id}", method: :delete, data: {confirm: "are you sure?"}, class:"btn" %>
 							  </li>
 				  		<% end %>
-				</ul>
+				</ul></p>
 
-			</div>
-
-			<div class="action">
-				<%= f.submit "チェックボックスからレシピを検索", class:"btn btn-primary"  %>
+				<div class="action">
+					<%= f.submit "チェックボックスからレシピを検索", class:"btn btn-primary"  %>
+			　　</div>
 			</div>
 
 		<% end %>
 	<% else %>
 		<%= search_form_for @search, :url => {:action => 'index', :class => 'project'} do |f| %>
 
-			<div class="wrapper">
+			<div class="box">
+			<span class="box-title">食材リスト</span><p>
 				<ul style="list-style: none;">
 				   		<%= f.collection_check_boxes :materials_name_cont, @user.projects, :title, :title, include_hidden: true do |b| %>
 						   	  <li>
@@ -37,20 +36,27 @@
 					    		<%= link_to "削除", "projects/#{b.object.id}", method: :delete, data: {confirm: "are you sure?"}, class:"btn" %>
 							  </li>
 						<% end %>
-				</ul>
+				</ul></p>
+
+				<div class="action">
+					<%= f.submit "チェックボックスからレシピを検索", class:"btn btn-primary" %>
+				</div>
+
 			</div>
-
-
-			<div class="action">
-				<%= f.submit "チェックボックスからレシピを検索", class:"btn btn-primary"  %>
-			</div>
-
 		<% end %>
 	<% end %>
 
-	<% if current_user.id == 1 %>
-		<%= link_to "レシピデータを更新する（実行に5分ほど時間がかかります！）", :action => "recipe", :controller => "projects" %>
-	<% end %>
+	<br>
+	<div class="box">
+		<span class="box-title">食材をリストに追加する</span>
+		<%= render 'form' %>
+	</div>
+
+	<p><br>
+		<% if current_user.id == 1 %>
+			<%= link_to "レシピデータを更新する（実行に5分ほど時間がかかります！）", :action => "recipe", :controller => "projects" %>
+		<% end %>
+	</p>
 
 	</div>
 
@@ -58,12 +64,14 @@
 	<h2>今作れるレシピ</h2>
 		<% if params[:q].present? %>
 			<% @result.each do |recipe| %>
-				<div class="wrapper">
-					<p>レシピ名：<%= link_to recipe.title, recipe.url, :target => ["_blank"] %><br>
-						食材：<% recipe.materials.each do |m| %>
+				<div class="box">
+					<div class="box-title"><%= link_to recipe.title, recipe.url, :target => ["_blank"] %></div>
+						<p>食材：<% recipe.materials.each do |m| %>
 							<%= m.name %>｜
-						<% end %></p>
-				</div>
+						<% end %>
+							
+						</p>
+				</div>				
 			<% end %>
 		<% else %>
 			<p>検索結果がありません</p>
