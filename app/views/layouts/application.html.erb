@@ -9,17 +9,19 @@
   </head>
 
   <body>
-    <!--<%= image_tag 'logo.png' %>--><h1>冷蔵庫を管理するアプリ</h1><%= link_to "HOME", "/" %>｜
+    <h1 class="title">Pantry Manager</h1><br>
 
 <!-- deviseのログイン機能に関する記述 -->
+      <div class="nav">
         <% if user_signed_in? %>
-           Logged in as <%= current_user.email %>｜
+           こんにちは、<%= current_user.name %>さん｜
             <%= link_to "ログアウト", destroy_user_session_path, method: :delete %>｜
             <%= link_to 'プロフィール変更', edit_user_registration_path %>｜
         <% else %>
             <%= link_to "新規登録", new_user_registration_path %> |
             <%= link_to "ログイン", new_user_session_path %>
         <% end %>
+      </div>
 <!-- メインコンテンツ -->
     <%= yield %>
   </body>
