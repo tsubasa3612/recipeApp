@@ -39,6 +39,10 @@ gem 'bootstrap-sass', '~> 3.3.6'
 gem 'devise'
 gem 'ransack'
 
+group :production do
+  gem 'rails_12factor'
+end
+
 group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
