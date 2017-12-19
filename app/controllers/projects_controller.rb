@@ -1,3 +1,5 @@
+require 'net/http'
+require 'net/https'
 class ProjectsController < ApplicationController
 	before_action :set_project, only: [:show, :edit, :update, :destroy]
 
@@ -56,6 +58,7 @@ class ProjectsController < ApplicationController
                 uri = URI.parse('https://app.rakuten.co.jp/services/api/Recipe/CategoryRanking/20170426?format=json&categoryId=' + c["categoryId"] + '&elements=recipiId%2CrecipeTitle%2CrecipeUrl%2CsmallImageUrl%2CrecipeMaterial&applicationId=1039136772752765175')
                 json = Net::HTTP.get(uri)
                 results = JSON.parse(json)
+                binding.pry
                     #パースしたjsonデータをDBに入れるための繰り返し処理
                     results["result"].each do |r|
                         recipe = Recipe.create(title: r["recipeTitle"], url: r["recipeUrl"], image: r["smallImageUrl"]) # recipe = の変数宣言がないとエラー吐く
